@@ -3,13 +3,17 @@ package com.example.tushu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.tushu.entity.User;
+import com.example.tushu.mapper.RoleAuthorityMapper;
 import com.example.tushu.mode.vo.loginvo;
+import com.example.tushu.service.RoleAuthorityService;
 import com.example.tushu.service.UserService;
 import com.example.tushu.util.result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * <p>
@@ -25,6 +29,8 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final RoleAuthorityService roleAuthorityService;
+    private final RoleAuthorityMapper roleAuthorityMapper;
 
     @ApiOperation(value = "获取用户信息", notes = "根据ID获取")
     @GetMapping("/getbyid")
@@ -36,8 +42,8 @@ public class UserController {
     @ApiOperation(value = "id", notes = "测试")
     @PostMapping("/test")
 //    @CrossOrigin(origins = "*")
-    public result test(int id) {
-        User data = userService.getById(id);
+    public result test(int ID_role) {
+        List data = roleAuthorityMapper.getbyid(ID_role);
         return result.ok(data);
     }
 

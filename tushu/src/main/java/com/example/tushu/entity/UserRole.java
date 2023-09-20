@@ -1,13 +1,15 @@
 package com.example.tushu.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
-import java.io.Serializable;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author grc
@@ -18,7 +20,8 @@ import lombok.EqualsAndHashCode;
 public class UserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    @TableId("ID_user")
+    private Integer ID;
     @TableField("ID_user")
     private Integer idUser;
 

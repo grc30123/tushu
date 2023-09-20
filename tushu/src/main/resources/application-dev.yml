@@ -4,9 +4,9 @@ spring:
   security:
     cors:
       enable: true
-    user:
-      name: 2
-      password: 2
+  #    user:
+  #      name: 2
+  #      password: 2
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
