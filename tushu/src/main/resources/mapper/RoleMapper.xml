@@ -4,13 +4,14 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.tushu.entity.Role">
-        <id column="ID_role" property="idRole" />
+        <id column="ID" property="id" />
+        <result column="ID_role" property="idRole" />
         <result column="roleName" property="roleName" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID_role, roleName
+        ID, ID_role, roleName
     </sql>
 
 </mapper>
