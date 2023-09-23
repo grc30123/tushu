@@ -58,8 +58,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             Authority privilege = authorityService.getById(authorityName.get(i).getIdAuthority());
             authorities.add(new SimpleGrantedAuthority(privilege.getAuthorityName()));
         }
-
-
         return new org.springframework.security.core.userdetails.User(user.getAccount(), user.getPassword(), authorities);
 
     }

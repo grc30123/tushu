@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // 获取请求头中的Authorization字段
         String header = request.getHeader("Authorization");
         // 如果请求头中有Authorization字段，并且以Bearer开头，则尝试解析令牌
-        if (header != null && header.startsWith("Bearer ")) {
+        if (header != null && header.startsWith("Bearer.")) {
             try {
                 // 截取令牌字符串并解析
                 String token = header.substring(7);

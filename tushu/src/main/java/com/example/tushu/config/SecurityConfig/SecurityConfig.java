@@ -3,8 +3,12 @@ package com.example.tushu.config.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -20,32 +24,33 @@ public class SecurityConfig {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
-
     @Autowired
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-
     @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-
     @Autowired
     private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
-
     @Autowired
     private CustomLogoutSuccessHandler customLogoutSuccessHandler;
-
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Bean
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
+    }
+
+    @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/user/**").permitAll()
+                .antMatchers("/user/login").permitAll()
                 .anyRequest().authenticated()//所有请求拦截 authenticated经过验证的
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/user/login") // 指定登录的路径为/login
                 .usernameParameter("account")
                 .passwordParameter("password")
+                //认证成功后再返回成功信息
                 .successHandler(customAuthenticationSuccessHandler)
                 .failureHandler(customAuthenticationFailureHandler)
                 .and()
@@ -61,6 +66,8 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()//               默认只有get请求可以通过认证 这句代码让所有请求都能通过认证
                 .headers().cacheControl().disable()
+                //关闭session登录验证
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
         return http.build();
     }
@@ -80,5 +87,12 @@ public class SecurityConfig {
         return source;
     }
 
-
+    //验证密码是否正确
+    @Bean
+    public DaoAuthenticationProvider daoAuthenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(customUserDetailsService);
+        provider.setPasswordEncoder(passwordEncoder());
+        return provider;
+    }
 }

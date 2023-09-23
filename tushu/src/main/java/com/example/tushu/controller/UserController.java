@@ -1,7 +1,6 @@
 package com.example.tushu.controller;
 
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.tushu.entity.User;
 import com.example.tushu.mapper.RoleAuthorityMapper;
 import com.example.tushu.mode.vo.loginvo;
@@ -51,13 +50,13 @@ public class UserController {
     @PostMapping("/login")
 //    @CrossOrigin(origins = "*")
     public result login(@RequestBody loginvo form) {
-        QueryWrapper condition = new QueryWrapper<>();
-        condition.eq("account", form.getAccount());
-        User user = userService.getOne(condition);
-        String res = user.getPassword();
-        if (res.equals(form.getPassword())) {
-            return result.ok(user);
-        }
+//        QueryWrapper condition = new QueryWrapper<>();
+//        condition.eq("account", form.getAccount());
+//        User user = userService.getOne(condition);
+//        String res = user.getPassword();
+//        if (res.equals(form.getPassword())) {
+//            return result.ok(user);
+//        }
         return result.err();
     }
 
