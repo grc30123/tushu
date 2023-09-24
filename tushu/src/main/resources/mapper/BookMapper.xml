@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.tushu.mapper.BookMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.tushu.entity.Book">
+        <id column="book_id" property="bookId" />
+        <result column="title" property="title" />
+        <result column="author" property="author" />
+        <result column="publication_date" property="publicationDate" />
+        <result column="isbn" property="isbn" />
+        <result column="price" property="price" />
+        <result column="stock_quantity" property="stockQuantity" />
+        <result column="description" property="description" />
+        <result column="category_id" property="categoryId" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        book_id, title, author, publication_date, isbn, price, stock_quantity, description, category_id
+    </sql>
+
+</mapper>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.tushu.mapper.AddressMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.tushu.entity.Address">
+        <id column="address_id" property="addressId" />
+        <result column="customer_name" property="customerName" />
+        <result column="street_address" property="streetAddress" />
+        <result column="city" property="city" />
+        <result column="state" property="state" />
+        <result column="postal_code" property="postalCode" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        address_id, customer_name, street_address, city, state, postal_code
+    </sql>
+
+</mapper>
