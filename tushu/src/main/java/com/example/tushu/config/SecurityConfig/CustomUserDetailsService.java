@@ -43,6 +43,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         condition.eq("account", username);
         User user = userService.getOne(condition);
         Long ID_user = user.getIdUser();//用户ID
+        Long phone = user.getPhone();
         Integer ID_role = userRoleService.getById(ID_user).getIdRole(); //角色ID
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在，请检查用户名是否输入正确");
@@ -51,7 +52,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();//权限
         //将角色名添加到权限集合中，注意要加上"ROLE_"前缀
         String roles = roleMapper.getbyid(ID_role).getRoleName();//角色
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + roles));
+//        authorities.add(new SimpleGrantedAuthority("ROLE_" + roles));
+        authorities.add(new SimpleGrantedAuthority(roles));
         //将角色的权限添加到权限集合中
         List<RoleAuthority> authorityName = roleAuthorityMapper.getbyid(ID_role);
         for (int i = 0; i < authorityName.size(); i++) {
@@ -59,6 +61,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             authorities.add(new SimpleGrantedAuthority(privilege.getAuthorityName()));
         }
         return new org.springframework.security.core.userdetails.User(user.getAccount(), user.getPassword(), authorities);
+//        return new com.example.tushu.mode.vo.User(user.getAccount(), user.getPassword(), authorities, ID_user, phone);
 
     }
 }

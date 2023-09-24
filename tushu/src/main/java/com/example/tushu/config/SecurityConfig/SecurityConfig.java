@@ -6,7 +6,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -58,6 +57,10 @@ public class SecurityConfig {
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 .and()
                 .logout()
+//                .logoutRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/user/logout", "post")))
+                .logoutUrl("/user/logout")
+                .invalidateHttpSession(true) //注销登录 后清除 session
+                .clearAuthentication(true)  //注销登录 后 清除认证信息
                 .logoutSuccessHandler(customLogoutSuccessHandler)
                 .and()
                 // 在用户名密码认证过滤器之前添加令牌校验过滤器，用于拦截每个请求，校验请求头中是否携带有效的令牌，并将认证信息存入SecurityContext中
@@ -66,8 +69,8 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()//               默认只有get请求可以通过认证 这句代码让所有请求都能通过认证
                 .headers().cacheControl().disable()
-                //关闭session登录验证
-                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        //关闭session登录验证
+//                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
         return http.build();
     }

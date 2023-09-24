@@ -26,6 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取请求头中的Authorization字段
+        
         String header = request.getHeader("Authorization");
         // 如果请求头中有Authorization字段，并且以Bearer开头，则尝试解析令牌
         if (header != null && header.startsWith("Bearer.")) {
