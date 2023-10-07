@@ -43,6 +43,14 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/user/login").permitAll()
+//                .antMatchers("/user/register").anonymous()
+//                .antMatchers("/user/sendEmailCode").anonymous()
+//                .antMatchers("/user/sendEmailRegisterCode").anonymous()
+//                .antMatchers("/swagger-ui.html").anonymous()
+//                .antMatchers("/v2/**").anonymous()
+//                .antMatchers("/swagger-resources/**").anonymous()
+//                .antMatchers("/webjars/springfox-swagger-ui").anonymous()
+//                .antMatchers("/webjars/springfox-swagger-ui/**").anonymous()
                 .anyRequest().authenticated()//所有请求拦截 authenticated经过验证的
                 .and()
                 .formLogin()
