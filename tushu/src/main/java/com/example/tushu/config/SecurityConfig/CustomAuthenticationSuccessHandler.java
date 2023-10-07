@@ -26,7 +26,7 @@ public class CustomAuthenticationSuccessHandler implements org.springframework.s
         // 生成一个JWT令牌，并设置过期时间和签名密钥
         String token = Jwts.builder()
                 .setSubject(user.getUsername())
-                .setExpiration(new Date(System.currentTimeMillis() + 60 * 60 * 1000))//最小单位为毫秒
+                .setExpiration(new Date(System.currentTimeMillis() + 600 * 60 * 1000))//最小单位为毫秒
                 .signWith(SignatureAlgorithm.HS512, "secret")
                 .compact();
         // 设置响应状态码为200

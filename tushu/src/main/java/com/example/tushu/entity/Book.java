@@ -1,16 +1,16 @@
 package com.example.tushu.entity;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author grc
@@ -25,11 +25,11 @@ public class Book implements Serializable {
     @TableId(value = "book_id", type = IdType.AUTO)
     private Integer bookId;
 
-    private String title;
+    private String name;
 
     private String author;
 
-    private Date publicationDate;
+    private String publicationDate;
 
     private String isbn;
 
@@ -39,7 +39,7 @@ public class Book implements Serializable {
 
     private String description;
 
-    private Integer categoryId;
+    private String category;
 
 
 }

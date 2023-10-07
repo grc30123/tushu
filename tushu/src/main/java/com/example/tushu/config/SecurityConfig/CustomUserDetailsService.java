@@ -56,11 +56,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         authorities.add(new SimpleGrantedAuthority(roles));
         //将角色的权限添加到权限集合中
         List<RoleAuthority> authorityName = roleAuthorityMapper.getbyid(ID_role);
+
         for (int i = 0; i < authorityName.size(); i++) {
             Authority privilege = authorityService.getById(authorityName.get(i).getIdAuthority());
             authorities.add(new SimpleGrantedAuthority(privilege.getAuthorityName()));
         }
-        return new org.springframework.security.core.userdetails.User(user.getAccount(), user.getPassword(), authorities);
+        return new com.example.tushu.mode.vo.User(user.getAccount(), user.getPassword(), authorities, ID_user, phone, roles);
 //        return new com.example.tushu.mode.vo.User(user.getAccount(), user.getPassword(), authorities, ID_user, phone);
 
     }

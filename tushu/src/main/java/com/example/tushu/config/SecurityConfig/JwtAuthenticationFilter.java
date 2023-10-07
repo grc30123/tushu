@@ -1,6 +1,7 @@
 package com.example.tushu.config.SecurityConfig;
 
 
+import com.example.tushu.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,14 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+    @Autowired
+    private UserService userService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 获取请求头中的Authorization字段
-        
+
+
         String header = request.getHeader("Authorization");
         // 如果请求头中有Authorization字段，并且以Bearer开头，则尝试解析令牌
         if (header != null && header.startsWith("Bearer.")) {
@@ -44,7 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     // 根据用户名加载用户信息和权限
                     UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
                     // 创建一个UsernamePasswordAuthenticationToken对象，用于存放认证信息
-                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+//                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, null);
                     // 设置当前请求的详情，例如IP地址等
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     // 将认证信息存入SecurityContext中，表示当前用户已认证通过

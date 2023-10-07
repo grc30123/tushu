@@ -1,22 +1,22 @@
 package com.example.tushu.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.tushu.entity.User;
-import com.example.tushu.mapper.RoleAuthorityMapper;
-import com.example.tushu.service.RoleAuthorityService;
+import com.example.tushu.mode.vo.UserInfo;
 import com.example.tushu.service.UserService;
 import com.example.tushu.util.result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -33,45 +33,56 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
-    private final RoleAuthorityService roleAuthorityService;
-    private final RoleAuthorityMapper roleAuthorityMapper;
 
     @GetMapping("/getinfo")
     public result getinfo() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        Authentication authentication = context.getAuthentication();
-        return authentication == null ? result.err() : result.ok(authentication);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        com.example.tushu.mode.vo.User principal = (com.example.tushu.mode.vo.User) authentication.getPrincipal();
+        long idUser = principal.getIdUser();
+        String account = principal.getUsername();
+        String role = principal.getRole();
+        Collection<GrantedAuthority> authorities = principal.getAuthorities();
+        UserInfo userInfo = new UserInfo(idUser, account, role, authorities);
+        return authentication == null ? result.err() : result.ok(userInfo);
     }
-
 
     @ApiOperation(value = "获取用户信息", notes = "根据ID获取")
-    @GetMapping("/getbyid")
-    public User get(int id) {
+    @GetMapping("/GetById")
+    public result GetById(int id) {
         User res = userService.getById(id);
-        return res;
+        return res == null ? result.err() : result.ok(res);
     }
 
-    @ApiOperation(value = "id", notes = "测试")
-    @PostMapping("/test")
-//    @CrossOrigin(origins = "*")
-    public result test(int ID_role) {
-        List data = roleAuthorityMapper.getbyid(ID_role);
-        return result.ok(data);
+    @ApiOperation(value = "获取用户信息", notes = "根据ID获取")
+    @PostMapping("/DeleteById")
+    public result DeleteById(int id) {
+        boolean res = userService.removeById(id);
+        return res == false ? result.err() : result.ok(res);
     }
 
-//    @ApiOperation(value = "account password", notes = "登录")
-//    @PostMapping("/login")
-////    @CrossOrigin(origins = "*")
-//    public result login(@RequestBody loginvo form) {
-////        QueryWrapper condition = new QueryWrapper<>();
-////        condition.eq("account", form.getAccount());
-////        User user = userService.getOne(condition);
-////        String res = user.getPassword();
-////        if (res.equals(form.getPassword())) {
-////            return result.ok(user);
-////        }
-//        return result.err();
-//    }
+    @PostMapping("/GetList")
+    public result GetList(@RequestParam("size") int size, @RequestParam("current") int current, @RequestBody User condition) {
+        Page<User> objectPage = new Page<>(current, size);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        if (condition.getAccount() != null) {
+            queryWrapper.like("account", condition.getAccount());
+        }
+        IPage<User> page = userService.page(objectPage, queryWrapper);
+        List<User> res = page.getRecords();
+        return res == null ? result.err() : result.ok(res);
+    }
 
+    @PostMapping("/SaveOrUpdate")
+    public result SaveOrUpdate(@RequestBody User user) {
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("ID_user", user.getIdUser());
+        boolean res = userService.saveOrUpdate(user, queryWrapper);
+        return res == false ? result.err() : result.ok(res);
+    }
 
+    @PostMapping("/Register")
+    public result Register(@RequestBody User user) {
+        boolean res = userService.save(user);
+        return res == false ? result.err() : result.ok(res);
+    }
 }

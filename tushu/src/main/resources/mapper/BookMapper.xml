@@ -4,20 +4,21 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.tushu.entity.Book">
-        <id column="book_id" property="bookId" />
-        <result column="title" property="title" />
-        <result column="author" property="author" />
-        <result column="publication_date" property="publicationDate" />
-        <result column="isbn" property="isbn" />
-        <result column="price" property="price" />
-        <result column="stock_quantity" property="stockQuantity" />
-        <result column="description" property="description" />
-        <result column="category_id" property="categoryId" />
+        <id column="book_id" property="bookId"/>
+        <result column="title" property="name"/>
+        <result column="author" property="author"/>
+        <result column="publication_date" property="publicationDate"/>
+        <result column="isbn" property="isbn"/>
+        <result column="price" property="price"/>
+        <result column="stock_quantity" property="stockQuantity"/>
+        <result column="description" property="description"/>
+        <result column="category" property="category"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        book_id, title, author, publication_date, isbn, price, stock_quantity, description, category_id
+        book_id
+        , title, author, publication_date, isbn, price, stock_quantity, description, category_id
     </sql>
 
 </mapper>

@@ -1,19 +1,20 @@
 package com.example.tushu.entity;
 
-import java.math.BigDecimal;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author grc
- * @since 2023-09-24
+ * @since 2023-09-27
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -31,6 +32,8 @@ public class OrderDetails implements Serializable {
     private Integer quantity;
 
     private BigDecimal price;
+
+    private String state;
 
 
 }

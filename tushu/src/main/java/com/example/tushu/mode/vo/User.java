@@ -10,12 +10,16 @@ public class User extends org.springframework.security.core.userdetails.User {
 
     private long idUser;
     private long phone;
+    private String role;
 
-    public User(String username, String password, Collection<? extends GrantedAuthority> authorities, long idUser, long phone) {
+
+    public User(String username, String password, Collection<? extends GrantedAuthority> authorities, long idUser, long phone, String role) {
         super(username, password, authorities);
         this.idUser = idUser;
         this.phone = phone;
+        this.role = role;
     }
+
 
     public long getIdUser() {
         return idUser;
@@ -32,5 +36,14 @@ public class User extends org.springframework.security.core.userdetails.User {
     public void setPhone(long phone) {
         this.phone = phone;
     }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
 
 }
