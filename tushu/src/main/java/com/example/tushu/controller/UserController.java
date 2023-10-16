@@ -85,4 +85,17 @@ public class UserController {
         boolean res = userService.save(user);
         return res == false ? result.err() : result.ok(res);
     }
+
+    @PostMapping("/login")
+    public result login(User user) {
+//        String token = userService.login(user.getAccount(), user.getPassword());
+//        if (token == null) {
+//            result.err("用户名或密码错误");
+//        }
+//        Map<String, String> tokenMap = new HashMap<>();
+//        tokenMap.put("token", token);
+
+        return result.ok("tokenMap");
+    }
+
 }

@@ -1,11 +1,11 @@
 package com.example.tushu.service;
 
-import com.example.tushu.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.tushu.entity.User;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author grc
@@ -13,4 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserService extends IService<User> {
 
+    String login(String account, String password);
 }

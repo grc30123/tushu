@@ -3,9 +3,11 @@ package com.example.tushu.config.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -43,15 +45,20 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/user/login").permitAll()
-                .antMatchers("/upLoad/**").permitAll()
-//                .antMatchers("/user/register").anonymous()
-//                .antMatchers("/user/sendEmailCode").anonymous()
-//                .antMatchers("/user/sendEmailRegisterCode").anonymous()
-//                .antMatchers("/swagger-ui.html").anonymous()
-//                .antMatchers("/v2/**").anonymous()
-//                .antMatchers("/swagger-resources/**").anonymous()
-//                .antMatchers("/webjars/springfox-swagger-ui").anonymous()
-//                .antMatchers("/webjars/springfox-swagger-ui/**").anonymous()
+//                .antMatchers("/upLoad/**").permitAll()
+                .antMatchers(HttpMethod.GET, // 允许对于网站静态资源的无授权访问
+                        "/",
+                        "/swagger-ui/",
+                        "/*.html",
+                        "/favicon.ico",
+                        "/**/*.html",
+                        "/**/*.css",
+                        "/**/*.js",
+                        "/swagger-resources/**",
+                        "/v2/api-docs/**",
+                        "/doc.html"
+                )
+                .permitAll()
                 .anyRequest().authenticated()//所有请求拦截 authenticated经过验证的
                 .and()
                 .formLogin()
@@ -78,9 +85,11 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable()//               默认只有get请求可以通过认证 这句代码让所有请求都能通过认证
                 .headers().cacheControl().disable()
-        //关闭session登录验证
-//                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                //关闭session登录验证
+                .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         ;
+        // 禁用缓存
+        http.headers().cacheControl();
         return http.build();
     }
 

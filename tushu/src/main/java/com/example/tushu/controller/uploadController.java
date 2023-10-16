@@ -22,18 +22,18 @@ public class uploadController {
     public result upLoadImage(MultipartFile file) {
         String filename = file.getOriginalFilename();
         String suffixName = filename.substring(filename.lastIndexOf("."));
-        String newName = UUID.randomUUID() + suffixName;
+        String newName = UUID.randomUUID().toString().replaceAll("-", "") + suffixName;
         String saveUrl = upLoadPath + "/" + newName;
         File newFile = new File(saveUrl);
         if (!newFile.exists()) {
             newFile.mkdir();
         }
         try {
-            file.transferTo(newFile);
+            file.transferTo(newFile);//真正保存  路径和名字 放入一个File类型的名字中
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return result.ok(saveUrl);
+        return result.ok(newName);
     }
 
     // 处理图片读取请求
