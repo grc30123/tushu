@@ -25,6 +25,9 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/tushu?useSSl=false
     username: root
     password: 123456
+#  web:
+#    resources:
+#      static-locations: file:${web.upLoadPath}
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #配置mp的底层执行语句输出 输出sql语句执行情况

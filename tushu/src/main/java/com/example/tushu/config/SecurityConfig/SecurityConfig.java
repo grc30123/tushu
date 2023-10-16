@@ -43,6 +43,7 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/user/login").permitAll()
+                .antMatchers("/upLoad/**").permitAll()
 //                .antMatchers("/user/register").anonymous()
 //                .antMatchers("/user/sendEmailCode").anonymous()
 //                .antMatchers("/user/sendEmailRegisterCode").anonymous()
