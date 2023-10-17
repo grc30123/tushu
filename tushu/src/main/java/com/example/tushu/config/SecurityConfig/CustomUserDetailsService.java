@@ -53,8 +53,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> authorities = new ArrayList<>();//权限
         //将角色名添加到权限集合中，注意要加上"ROLE_"前缀
         String roles = roleMapper.getbyid(ID_role).getRoleName();//角色
-//        authorities.add(new SimpleGrantedAuthority("ROLE_" + roles));
-        authorities.add(new SimpleGrantedAuthority(roles));
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + roles));
+//        authorities.add(new SimpleGrantedAuthority(roles));
         //将角色的权限添加到权限集合中
         List<RoleAuthority> authorityName = roleAuthorityMapper.getbyid(ID_role);
 

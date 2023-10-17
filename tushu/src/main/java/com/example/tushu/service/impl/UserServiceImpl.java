@@ -5,6 +5,7 @@ import com.example.tushu.config.SecurityConfig.CustomUserDetailsService;
 import com.example.tushu.entity.User;
 import com.example.tushu.mapper.UserMapper;
 import com.example.tushu.service.UserService;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,13 +19,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
-    //    @Autowired
+    //        @Autowired
     private CustomUserDetailsService userDetailsService;
 
     @Override
     public String login(String account, String password) {
-//
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(account);
+
+        UserDetails userDetails = userDetailsService.loadUserByUsername(account);
 //        if (userDetails.getPassword().equals(password)) {
 //            return "密码不正确";
 //        }

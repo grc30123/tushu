@@ -4,7 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -60,24 +61,24 @@ public class SecurityConfig {
                 )
                 .permitAll()
                 .anyRequest().authenticated()//所有请求拦截 authenticated经过验证的
-                .and()
-                .formLogin()
-                .loginProcessingUrl("/user/login") // 指定登录的路径为/login
-                .usernameParameter("account")
-                .passwordParameter("password")
-                //认证成功后再返回成功信息
-                .successHandler(customAuthenticationSuccessHandler)
-                .failureHandler(customAuthenticationFailureHandler)
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(customAuthenticationEntryPoint)
-                .and()
-                .logout()
-//                .logoutRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/user/logout", "post")))
-                .logoutUrl("/user/logout")
-                .invalidateHttpSession(true) //注销登录 后清除 session
-                .clearAuthentication(true)  //注销登录 后 清除认证信息
-                .logoutSuccessHandler(customLogoutSuccessHandler)
+//                .and()
+//                .formLogin()
+//                .loginProcessingUrl("/user/login") // 指定登录的路径为/login
+//                .usernameParameter("account")
+//                .passwordParameter("password")
+//                //认证成功后再返回成功信息
+//                .successHandler(customAuthenticationSuccessHandler)
+//                .failureHandler(customAuthenticationFailureHandler)
+//                .and()
+//                .exceptionHandling()
+//                .authenticationEntryPoint(customAuthenticationEntryPoint)
+//                .and()
+//                .logout()
+////                .logoutRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/user/logout", "post")))
+//                .logoutUrl("/user/logout")
+//                .invalidateHttpSession(true) //注销登录 后清除 session
+//                .clearAuthentication(true)  //注销登录 后 清除认证信息
+//                .logoutSuccessHandler(customLogoutSuccessHandler)
                 .and()
                 // 在用户名密码认证过滤器之前添加令牌校验过滤器，用于拦截每个请求，校验请求头中是否携带有效的令牌，并将认证信息存入SecurityContext中
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
@@ -108,12 +109,21 @@ public class SecurityConfig {
         return source;
     }
 
-    //验证密码是否正确
+    //    验证密码是否正确
+//    @Bean
+//    public DaoAuthenticationProvider daoAuthenticationProvider() {
+//        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+//        provider.setUserDetailsService(customUserDetailsService);
+//        provider.setPasswordEncoder(passwordEncoder());
+//        return provider;
+//    }
+
     @Bean
-    public DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(customUserDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
+    AuthenticationManager authenticationManager() {
+        CustomAuthenticationProvider customAuthenticationProvider = new CustomAuthenticationProvider();
+        customAuthenticationProvider.setUserDetailsService(customUserDetailsService);
+        ProviderManager pm = new ProviderManager(customAuthenticationProvider);
+        return pm;
     }
+
 }

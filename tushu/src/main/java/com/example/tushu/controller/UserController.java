@@ -8,16 +8,21 @@ import com.example.tushu.entity.User;
 import com.example.tushu.mode.vo.UserInfo;
 import com.example.tushu.service.UserService;
 import com.example.tushu.util.result;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -33,6 +38,9 @@ import java.util.List;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @GetMapping("/getinfo")
     public result getinfo() {
@@ -88,14 +96,27 @@ public class UserController {
 
     @PostMapping("/login")
     public result login(User user) {
-//        String token = userService.login(user.getAccount(), user.getPassword());
-//        if (token == null) {
-//            result.err("用户名或密码错误");
-//        }
-//        Map<String, String> tokenMap = new HashMap<>();
-//        tokenMap.put("token", token);
 
-        return result.ok("tokenMap");
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.getAccount(), user.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        SecurityContext securityContext = SecurityContextHolder.getContext();
+        // 生成一个JWT令牌，并设置过期时间和签名密钥
+        String token = Jwts.builder()
+                .setSubject(user.getAccount())//账户名
+                .setExpiration(new Date(System.currentTimeMillis() + 600 * 60 * 1000))//最小单位为毫秒
+                .signWith(SignatureAlgorithm.HS512, "secret")
+                .compact();
+        Map<String, String> tokenMap = new HashMap<>();
+        tokenMap.put("token", token);
+
+        return result.ok(securityContext);
     }
 
+//    @PostMapping("/loginOut")
+//    public result loginOut(User user) {
+//
+//        return result.ok()
+//    }
 }
