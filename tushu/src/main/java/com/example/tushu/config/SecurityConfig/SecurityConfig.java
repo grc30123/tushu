@@ -29,6 +29,8 @@ public class SecurityConfig {
     @Autowired
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     @Autowired
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+    @Autowired
     private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
     @Autowired
     private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
@@ -45,7 +47,10 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeRequests()
+
                 .antMatchers("/user/login").permitAll()
+                .antMatchers("/orders/**").hasRole("SystemAdministor")
+//                .antMatchers("/orders/**").hasAuthority("get")
 //                .antMatchers("/upLoad/**").permitAll()
                 .antMatchers(HttpMethod.GET, // 允许对于网站静态资源的无授权访问
                         "/",
@@ -61,6 +66,7 @@ public class SecurityConfig {
                 )
                 .permitAll()
                 .anyRequest().authenticated()//所有请求拦截 authenticated经过验证的
+
 //                .and()
 //                .formLogin()
 //                .loginProcessingUrl("/user/login") // 指定登录的路径为/login
@@ -69,9 +75,10 @@ public class SecurityConfig {
 //                //认证成功后再返回成功信息
 //                .successHandler(customAuthenticationSuccessHandler)
 //                .failureHandler(customAuthenticationFailureHandler)
-//                .and()
-//                .exceptionHandling()
-//                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(customAuthenticationEntryPoint)
+//                .accessDeniedHandler(customAccessDeniedHandler)
 //                .and()
 //                .logout()
 ////                .logoutRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/user/logout", "post")))

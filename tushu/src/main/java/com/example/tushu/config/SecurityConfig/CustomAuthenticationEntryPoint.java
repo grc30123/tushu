@@ -24,6 +24,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
         // 设置响应编码为utf-8
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
         // 返回json格式的认证失败信息
-        response.getWriter().write(JSON.toJSONString(result.err("用户没有登录")));
+        response.getWriter().write(JSON.toJSONString(result.err("请登录后访问")));
     }
 }

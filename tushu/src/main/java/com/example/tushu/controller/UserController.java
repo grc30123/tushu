@@ -7,9 +7,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.tushu.entity.User;
 import com.example.tushu.mode.vo.UserInfo;
 import com.example.tushu.service.UserService;
+import com.example.tushu.util.JWT;
 import com.example.tushu.util.result;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -22,7 +21,10 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -96,27 +98,30 @@ public class UserController {
 
     @PostMapping("/login")
     public result login(User user) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(user.getAccount(), user.getPassword())
         );
+        if (authentication.getPrincipal() == null && authentication.getCredentials() == null) {
+            return result.err("密码错误");
+        }
+//        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken();
         SecurityContextHolder.getContext().setAuthentication(authentication);
         SecurityContext securityContext = SecurityContextHolder.getContext();
         // 生成一个JWT令牌，并设置过期时间和签名密钥
-        String token = Jwts.builder()
-                .setSubject(user.getAccount())//账户名
-                .setExpiration(new Date(System.currentTimeMillis() + 600 * 60 * 1000))//最小单位为毫秒
-                .signWith(SignatureAlgorithm.HS512, "secret")
-                .compact();
-        Map<String, String> tokenMap = new HashMap<>();
+        String token = JWT.generateJWT(user.getAccount());
+        Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
-
-        return result.ok(securityContext);
+        tokenMap.put("securityContext", securityContext);
+        return result.ok(tokenMap);
     }
 
-//    @PostMapping("/loginOut")
-//    public result loginOut(User user) {
-//
-//        return result.ok()
-//    }
+    @GetMapping("/logout")
+    public result logout() {
+        SecurityContextHolder.clearContext();
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
+            return result.ok("已经成功注销");
+        }
+        return result.err(SecurityContextHolder.getContext().getAuthentication());
+//        return result.ok(SecurityContextHolder.getContext());
+    }
 }

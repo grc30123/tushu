@@ -1,7 +1,6 @@
 package com.example.tushu.config.SecurityConfig;
 
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -33,7 +32,8 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (userDetails != null && isPasswordValid(password, userDetails.getPassword())) {
             return new UsernamePasswordAuthenticationToken(userDetails, password, userDetails.getAuthorities());
         } else {
-            throw new BadCredentialsException("Invalid username or password");
+            return new UsernamePasswordAuthenticationToken(null, null, null);
+//            throw new BadCredentialsException("Invalid username or password");
         }
     }
 
