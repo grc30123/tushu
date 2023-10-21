@@ -44,6 +44,7 @@ public class UserController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
+    @ApiOperation("获取用户信息")
     @GetMapping("/getinfo")
     public result getinfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -53,6 +54,7 @@ public class UserController {
         String role = principal.getRole();
         Collection<GrantedAuthority> authorities = principal.getAuthorities();
         UserInfo userInfo = new UserInfo(idUser, account, role, authorities);
+        SecurityContext context = SecurityContextHolder.getContext();
         return authentication == null ? result.err() : result.ok(userInfo);
     }
 
@@ -63,23 +65,23 @@ public class UserController {
         return res == null ? result.err() : result.ok(res);
     }
 
-    @ApiOperation(value = "获取用户信息", notes = "根据ID获取")
+    @ApiOperation(value = "ID 删除用户", notes = "根据ID获取")
     @PostMapping("/DeleteById")
     public result DeleteById(int id) {
         boolean res = userService.removeById(id);
         return res == false ? result.err() : result.ok(res);
     }
 
+    @ApiOperation("分页列表")
     @PostMapping("/GetList")
     public result GetList(@RequestParam("size") int size, @RequestParam("current") int current, @RequestBody User condition) {
-        Page<User> objectPage = new Page<>(current, size);
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        if (condition.getAccount() != null) {
-            queryWrapper.like("account", condition.getAccount());
-        }
-        IPage<User> page = userService.page(objectPage, queryWrapper);
-        List<User> res = page.getRecords();
-        return res == null ? result.err() : result.ok(res);
+        IPage<User> page = userService.page(new Page<>(current, size), new QueryWrapper<User>().like("account", condition.getAccount()));
+        List<User> list = page.getRecords();
+        int total = userService.list().size();
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("total", total);
+        res.put("list", list);
+        return result.ok(res);
     }
 
     @PostMapping("/SaveOrUpdate")
@@ -104,7 +106,6 @@ public class UserController {
         if (authentication.getPrincipal() == null && authentication.getCredentials() == null) {
             return result.err("密码错误");
         }
-//        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken();
         SecurityContextHolder.getContext().setAuthentication(authentication);
         SecurityContext securityContext = SecurityContextHolder.getContext();
         // 生成一个JWT令牌，并设置过期时间和签名密钥

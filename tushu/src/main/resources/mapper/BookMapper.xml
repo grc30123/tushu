@@ -13,6 +13,7 @@
         <result column="stock_quantity" property="stockQuantity"/>
         <result column="description" property="description"/>
         <result column="category" property="category"/>
+        <result column="image_url" property="imageUrl"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->

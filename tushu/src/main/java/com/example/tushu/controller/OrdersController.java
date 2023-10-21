@@ -2,13 +2,14 @@ package com.example.tushu.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.tushu.entity.Orders;
 import com.example.tushu.service.OrdersService;
 import com.example.tushu.util.result;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -22,7 +23,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/orders")
 public class OrdersController {
-
     private final OrdersService ordersService;
 
     public OrdersController(OrdersService ordersService) {
@@ -31,13 +31,12 @@ public class OrdersController {
 
     @PostMapping("/GetList")
     public result GetList(@RequestParam int size, @RequestParam int current, @RequestBody Orders orders) {
-        Page<Orders> objectPage = new Page<>(current, size);
-        QueryWrapper<Orders> queryWrapper = new QueryWrapper<>();
-        if (orders.getAccount() != null) {
-            queryWrapper.like("account", orders.getAccount());
-        }
-        IPage<Orders> Records = ordersService.page(objectPage, queryWrapper);
-        List<Orders> res = Records.getRecords();
+        Page<Orders> page = ordersService.page(new Page<>(current, size), new QueryWrapper<Orders>().like("account", orders.getAccount()));
+        List<Orders> list = page.getRecords();
+        int total = ordersService.list().size();
+        HashMap<Object, Object> res = new HashMap<>();
+        res.put("list", list);
+        res.put("total", total);
         return result.ok(res);
     }
 
@@ -47,10 +46,9 @@ public class OrdersController {
         return res == null ? result.err() : result.ok(res);
     }
 
+    @ApiOperation("通过ID进行更改")
     @PostMapping("/SaveOrUpdate")
     public result SaveOrUpdate(@RequestBody Orders orders) {
-        QueryWrapper<Object> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("order_id", orders.getOrderId());
         boolean res = ordersService.saveOrUpdate(orders);
         return res == false ? result.err() : result.ok(res);
     }

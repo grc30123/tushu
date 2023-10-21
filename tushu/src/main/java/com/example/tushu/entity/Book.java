@@ -41,5 +41,7 @@ public class Book implements Serializable {
 
     private String category;
 
+    private String imageUrl;
+
 
 }

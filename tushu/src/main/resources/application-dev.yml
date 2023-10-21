@@ -10,11 +10,13 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-  devtools:
-    restart:
-      enabled: true
-      additional-paths: src/main/java
-      additional-exclude: static/**
+      static-path-pattern: /static/**
+    #      static-path-pattern: ${web.upLoadPath}
+    devtools:
+      restart:
+        enabled: false
+        additional-paths: src/main/java
+        additional-exclude: static/**
   servlet:
     multipart:
       max-file-size: 50MB

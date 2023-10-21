@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * <p>
@@ -28,7 +27,7 @@ public class Orders implements Serializable {
 
     private String customerName;
 
-    private Date orderDate;
+    private String orderDate;
 
     private String account;
 

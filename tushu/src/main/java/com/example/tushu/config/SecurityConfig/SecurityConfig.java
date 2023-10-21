@@ -49,7 +49,8 @@ public class SecurityConfig {
         http.authorizeRequests()
 
                 .antMatchers("/user/login").permitAll()
-                .antMatchers("/orders/**").hasRole("SystemAdministor")
+                .antMatchers("/upLoad/**").permitAll()
+                .antMatchers("/orders/**").hasRole("系统管理员")
 //                .antMatchers("/orders/**").hasAuthority("get")
 //                .antMatchers("/upLoad/**").permitAll()
                 .antMatchers(HttpMethod.GET, // 允许对于网站静态资源的无授权访问

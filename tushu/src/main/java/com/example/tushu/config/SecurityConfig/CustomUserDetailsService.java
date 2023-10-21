@@ -45,7 +45,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userService.getOne(condition);
         Long ID_user = user.getIdUser();//用户ID
         Long phone = user.getPhone();
-        Integer ID_role = userRoleService.getById(ID_user).getIdRole(); //角色ID
+        Integer ID_role = userRoleService.getId(ID_user).getIdRole(); //角色ID
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在，请检查用户名是否输入正确");
         }

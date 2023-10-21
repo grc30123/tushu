@@ -4,13 +4,19 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.tushu.entity.UserRole">
-        <result column="ID_user" property="idUser" />
-        <result column="ID_role" property="idRole" />
+        <result column="ID_user" property="idUser"/>
+        <result column="ID_role" property="idRole"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID_user, ID_role
+        ID_user
+        , ID_role
     </sql>
+    <select id="getById" resultType="com.example.tushu.entity.UserRole">
+        select ID_user, ID_role
+        from user_role
+        where ID_user = #{ID_user}
+    </select>
 
 </mapper>

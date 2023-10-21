@@ -1,11 +1,11 @@
 package com.example.tushu.service;
 
-import com.example.tushu.entity.UserRole;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.tushu.entity.UserRole;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author grc
@@ -13,4 +13,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface UserRoleService extends IService<UserRole> {
 
+    String getRoleId(String idUser, String roleName);
+
+    UserRole getId(Long id_user);
 }

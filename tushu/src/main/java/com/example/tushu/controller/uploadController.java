@@ -10,36 +10,46 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.util.UUID;
 
 @RestController
-@RequestMapping("upLoad")
+@RequestMapping("/upLoad")
 public class uploadController {
-    @Value(("${web.upLoadPath}"))
-    private String upLoadPath;
+    //    @Value(("${web.upLoadPath}"))
+//    private String upLoadPath;
+    @Value("${spring.servlet.multipart.location}")
+    private String uploadPath;
 
-    @PostMapping("/upLoadImage")
-    public result upLoadImage(MultipartFile file) {
-        String filename = file.getOriginalFilename();
-        String suffixName = filename.substring(filename.lastIndexOf("."));
-        String newName = UUID.randomUUID().toString().replaceAll("-", "") + suffixName;
-        String saveUrl = upLoadPath + "/" + newName;
-        File newFile = new File(saveUrl);
-        if (!newFile.exists()) {
-            newFile.mkdir();
+    @PostMapping("/uploadImage")
+    public result uploadImage(@RequestParam("file") MultipartFile file) {
+        // 判断文件是否为空
+        if (file.isEmpty()) {
+            return result.err("请选择要上传的文件");
+        }
+        // 获取文件名
+        String fileName = file.getOriginalFilename();
+        // 获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        // 生成新的文件名
+        String newFileName = System.currentTimeMillis() + suffixName;
+        File dest = new File(uploadPath + newFileName);
+        if (!dest.getParentFile().exists()) {
+            dest.getParentFile().mkdirs();
         }
         try {
-            file.transferTo(newFile);//真正保存  路径和名字 放入一个File类型的名字中
+            file.transferTo(dest);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-        return result.ok(newName);
+        return result.ok();
+
     }
 
     // 处理图片读取请求
-    @GetMapping("/read")
-    public ResponseEntity<InputStreamResource> read(@RequestParam("fileName") String fileName) throws FileNotFoundException {
-        String filePath = upLoadPath + "/" + fileName; // 拼接图片文件的真实路径
+    @GetMapping("/read/{fileName}")
+    public ResponseEntity<InputStreamResource> read(@PathVariable("fileName") String fileName) throws FileNotFoundException {
+        String filePath = uploadPath + fileName; // 拼接图片文件的真实路径
+//        String filePath = "/static/books" + fileName; // 拼接图片文件的真实路径
+//        + "/bookImage/"
         File file = new File(filePath); // 创建文件对象
         if (file.exists()) { // 判断文件是否存在
             InputStream inputStream = new FileInputStream(file); // 创建输入流对象
@@ -51,6 +61,5 @@ public class uploadController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 如果文件不存在，返回404状态码
         }
     }
-
-
 }
+
