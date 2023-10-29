@@ -5,7 +5,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.tushu.entity.User;
+import com.example.tushu.entity.UserRole;
 import com.example.tushu.mode.vo.UserInfo;
+import com.example.tushu.service.RoleService;
+import com.example.tushu.service.UserRoleService;
 import com.example.tushu.service.UserService;
 import com.example.tushu.util.JWT;
 import com.example.tushu.util.result;
@@ -43,6 +46,10 @@ public class UserController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserRoleService userRoleService;
+    @Autowired
+    private RoleService roleService;
 
     @ApiOperation("获取用户信息")
     @GetMapping("/getinfo")
@@ -87,8 +94,15 @@ public class UserController {
     @PostMapping("/SaveOrUpdate")
     public result SaveOrUpdate(@RequestBody User user) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("ID_user", user.getIdUser());
+        queryWrapper.eq("ID_user", user.getIdUser());//有ID则是更新 没有则是添加
         boolean res = userService.saveOrUpdate(user, queryWrapper);
+        UserRole role = userRoleService.getId(user.getIdUser());//保存后，通过
+        if (role == null) {
+            UserRole userRole = new UserRole();
+            userRole.setIdUser(Math.toIntExact(user.getIdUser()));
+            userRole.setIdRole(4);
+            userRoleService.save(userRole);
+        }
         return res == false ? result.err() : result.ok(res);
     }
 
@@ -112,7 +126,7 @@ public class UserController {
         String token = JWT.generateJWT(user.getAccount());
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("token", token);
-        tokenMap.put("securityContext", securityContext);
+//        tokenMap.put("securityContext", securityContext);
         return result.ok(tokenMap);
     }
 
@@ -123,6 +137,18 @@ public class UserController {
             return result.ok("已经成功注销");
         }
         return result.err(SecurityContextHolder.getContext().getAuthentication());
-//        return result.ok(SecurityContextHolder.getContext());
     }
+
+    @ApiOperation("用户角色联查")
+    @PostMapping("/getUserAndRole")
+    public result getUserAndRole(@RequestParam("size") int size, @RequestParam("current") int current, @RequestBody User condition) {
+//        @RequestParam("size") int size, @RequestParam("current") int current, @RequestBody User condition
+        List<Object> list = userService.getUserAndRole(size, --current * size, condition);
+        int total = userService.list().size();
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("total", total);
+        res.put("list", list);
+        return result.ok(res);
+    }
+
 }

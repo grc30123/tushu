@@ -59,4 +59,18 @@ public class OrdersController {
         return res == false ? result.err() : result.ok(res);
     }
 
+    @GetMapping("getTotal")
+    public result getTotal() {
+        int total = ordersService.count();
+        int successCount = ordersService.count(new QueryWrapper<Orders>().eq("paid", 1));//成功订单数
+        int failCount = ordersService.count(new QueryWrapper<Orders>().eq("paid", 0));//失败订单数
+        int waitCount = ordersService.count(new QueryWrapper<Orders>().eq("paid", 2));//等待完成订单数
+        HashMap<String, Object> res = new HashMap<>();
+        res.put("total", total);
+        res.put("successCount", successCount);
+        res.put("failCount", failCount);
+        res.put("waitCount", waitCount);
+        return result.ok();
+    }
+
 }

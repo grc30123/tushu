@@ -5,8 +5,11 @@ import com.example.tushu.config.SecurityConfig.CustomUserDetailsService;
 import com.example.tushu.entity.User;
 import com.example.tushu.mapper.UserMapper;
 import com.example.tushu.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -21,6 +24,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     //        @Autowired
     private CustomUserDetailsService userDetailsService;
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public String login(String account, String password) {
@@ -39,5 +44,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 //                .compact();
 //        return token;
         return "";
+    }
+
+    @Override
+    public List<Object> getUserAndRole(int size, int current, User condition) {
+        List<Object> userAndRole = userMapper.getUserAndRole(size, current, condition);
+        return userAndRole;
     }
 }

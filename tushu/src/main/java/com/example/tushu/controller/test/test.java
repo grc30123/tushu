@@ -21,6 +21,7 @@ import java.nio.file.StandardCopyOption;
 @RequestMapping("/api/upload")
 public class test {
 
+
     @PostMapping("/image")
     public ResponseEntity<result> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
@@ -72,5 +73,6 @@ public class test {
 
 
     }
+
 
 }

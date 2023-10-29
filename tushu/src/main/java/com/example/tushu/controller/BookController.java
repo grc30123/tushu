@@ -11,9 +11,6 @@ import com.example.tushu.util.result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,11 +62,13 @@ public class BookController {
     }
 
     @PostMapping("/savebook")
-    public result savebook(@RequestBody Book book) {
+    public result saveOrUpdate(@RequestBody Book book) {
         //格式化时间
-        Instant instant = Instant.parse(book.getPublicationDate());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC"));
-        book.setPublicationDate(formatter.format(instant));
+//        Instant instant = Instant.parse(book.getPublicationDate());
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("UTC"));
+//        book.setPublicationDate(formatter.format(instant));
+
+
         boolean res = bookService.saveOrUpdate(book);
         return result.ok(res);
     }

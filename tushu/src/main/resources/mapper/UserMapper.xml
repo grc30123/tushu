@@ -4,16 +4,29 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.tushu.entity.User">
-        <id column="ID_user" property="idUser" />
-        <result column="account" property="account" />
-        <result column="password" property="password" />
-        <result column="phone" property="phone" />
-        <result column="email" property="email" />
+        <id column="ID_user" property="idUser"/>
+        <result column="account" property="account"/>
+        <result column="password" property="password"/>
+        <result column="phone" property="phone"/>
+        <result column="email" property="email"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID_user, account, password, phone, email
+        ID_user
+        , account, password, phone, email
     </sql>
+    <select id="getUserAndRole" resultType="com.example.tushu.mode.dto.UserAndRole">
+        SELECT u.*, r.roleName
+        FROM user u
+        LEFT JOIN user_role ur ON u.ID_user = ur.ID_user
+        LEFT JOIN role r ON ur.ID_role = r.ID_role
+        <where>
+            <if test="condition.account != null and account != ''">
+                AND u.account = #{condition.account}
+            </if>
+        </where>
+        LIMIT #{size} OFFSET #{current}
+    </select>
 
 </mapper>

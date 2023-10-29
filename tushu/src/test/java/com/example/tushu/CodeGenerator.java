@@ -42,7 +42,7 @@ public class CodeGenerator {
         gc.setOutputDir(projectPath + "/src/main/java");
         gc.setAuthor("123");
         gc.setOpen(false);
-        gc.setFileOverride(true);//是否覆盖以前文件
+        gc.setFileOverride(false);//是否覆盖以前文件
         gc.setOpen(false);//是否打开生成目录
         gc.setAuthor("grc");//设置项目作者名称
         gc.setIdType(IdType.AUTO);//设置主键策略

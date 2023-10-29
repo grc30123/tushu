@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  * <p>
@@ -29,7 +30,7 @@ public class Book implements Serializable {
 
     private String author;
 
-    private String publicationDate;
+    private Date publicationDate;
 
     private String isbn;
 

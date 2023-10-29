@@ -16,4 +16,5 @@ public interface UserRoleService extends IService<UserRole> {
     String getRoleId(String idUser, String roleName);
 
     UserRole getId(Long id_user);
+
 }

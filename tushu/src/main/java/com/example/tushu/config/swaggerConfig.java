@@ -79,6 +79,7 @@ public class swaggerConfig implements WebMvcConfigurer {
                 .build();
     }
 
+
     private List<SecurityReference> defaultAuth() {
         List<SecurityReference> result = new ArrayList<>();
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");

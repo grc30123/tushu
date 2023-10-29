@@ -49,6 +49,7 @@ public class SecurityConfig {
         http.authorizeRequests()
 
                 .antMatchers("/user/login").permitAll()
+                .antMatchers("/Sms/SmsRegister").permitAll()
                 .antMatchers("/upLoad/**").permitAll()
                 .antMatchers("/orders/**").hasRole("系统管理员")
 //                .antMatchers("/orders/**").hasAuthority("get")

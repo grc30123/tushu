@@ -1,6 +1,7 @@
 package com.example.tushu.controller;
 
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.tushu.entity.UserRole;
 import com.example.tushu.service.UserRoleService;
 import com.example.tushu.util.result;
@@ -41,4 +42,12 @@ public class UserRoleController {
         connect.setIdRole(Integer.valueOf(roleID));
         return userRoleService.save(connect) ? result.ok() : result.err();
     }
+
+    @ApiOperation("更新用户ID--角色ID 关联")
+    @PostMapping("/updateIdRole")
+    public result updateIdRole(UserRole userRole) {
+        boolean res = userRoleService.update(userRole, new QueryWrapper<UserRole>().eq("ID_user", userRole.getIdUser()));
+        return res == true ? result.ok(res) : result.err(res);
+    }
+
 }

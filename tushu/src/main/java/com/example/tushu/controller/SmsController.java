@@ -2,10 +2,12 @@ package com.example.tushu.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
+@RequestMapping("/Sms")
 public class SmsController {
     String id = "111154";
     String smstoken = "1a6ea57199bd445c9ffb1002960554a5";

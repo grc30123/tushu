@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/upLoad")
@@ -30,7 +31,8 @@ public class uploadController {
         // 获取文件后缀名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));
         // 生成新的文件名
-        String newFileName = System.currentTimeMillis() + suffixName;
+//        String newFileName = System.currentTimeMillis() + suffixName;
+        String newFileName = UUID.randomUUID().toString() + suffixName;
         File dest = new File(uploadPath + newFileName);
         if (!dest.getParentFile().exists()) {
             dest.getParentFile().mkdirs();
@@ -40,7 +42,7 @@ public class uploadController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return result.ok();
+        return result.ok(newFileName);
 
     }
 

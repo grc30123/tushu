@@ -13,6 +13,7 @@
         ID_user
         , ID_role
     </sql>
+    <!--返回一个角色ID-->
     <select id="getById" resultType="com.example.tushu.entity.UserRole">
         select ID_user, ID_role
         from user_role
