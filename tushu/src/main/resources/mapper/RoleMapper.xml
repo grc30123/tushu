@@ -4,14 +4,22 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.tushu.entity.Role">
-        <id column="ID" property="id" />
-        <result column="ID_role" property="idRole" />
-        <result column="roleName" property="roleName" />
+        <id column="ID" property="id"/>
+        <result column="ID_role" property="idRole"/>
+        <result column="roleName" property="roleName"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID, ID_role, roleName
+        ID
+        , ID_role, roleName
     </sql>
+    <select id="roleResourceList" resultType="com.example.tushu.mode.dto.RoleAndResource">
+        SELECT role.roleName, resource.*
+        FROM role
+                 LEFT JOIN role_resource_relation ON role.ID_role = role_resource_relation.role_id
+                 LEFT JOIN resource ON role_resource_relation.resourse_id = resource.id
+        WHERE role.roleName = IFNULL(#{roleName}, role.roleName)
+    </select>
 
 </mapper>

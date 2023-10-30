@@ -13,6 +13,6 @@ import java.io.IOException;
 public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_FORBIDDEN, "你没有权限访问该内容");
+        response.sendError(HttpServletResponse.SC_FORBIDDEN, "权限不足");
     }
 }

@@ -37,8 +37,8 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #配置mp的底层执行语句输出 输出sql语句执行情况
   mapper-locations:
     - classpath:Mapper/*.xml
-#logging:
-#  level:
-#    org.springframework.security: DEBUG
+logging:
+  level:
+    org.springframework.security: DEBUG
 
 

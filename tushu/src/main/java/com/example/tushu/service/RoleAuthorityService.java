@@ -1,11 +1,13 @@
 package com.example.tushu.service;
 
-import com.example.tushu.entity.RoleAuthority;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.example.tushu.entity.RoleAuthority;
+
+import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author grc
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface RoleAuthorityService extends IService<RoleAuthority> {
 
+    int addBatch(List<RoleAuthority> roleAuthorities);
 }

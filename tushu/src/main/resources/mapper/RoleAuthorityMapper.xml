@@ -4,13 +4,20 @@
 
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.example.tushu.entity.RoleAuthority">
-        <result column="ID_role" property="idRole" />
-        <result column="ID_authority" property="idAuthority" />
+        <result column="ID_role" property="idRole"/>
+        <result column="ID_authority" property="idAuthority"/>
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        ID_role, ID_authority
+        ID_role
+        , ID_authority
     </sql>
+    <insert id="addBatch">
+        INSERT INTO role_authority (ID_role, ID_authority) VALUES
+        <foreach collection="list" item="roleAuthorities" separator=",">
+            (#{roleAuthorities.idRole}, #{roleAuthorities.idAuthority})
+        </foreach>
+    </insert>
 
 </mapper>

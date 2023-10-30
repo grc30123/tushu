@@ -87,4 +87,12 @@ public class RoleController {
         res.put("roleList", roleList);
         return result.ok(res);
     }
+
+    @ApiOperation("角色资源列表:参数为空，返回全部，存在角色名参数，返回对应角色资源")
+    @GetMapping("/roleResourceList")
+    public result roleResourceList(String roleName) {
+        List<Object> list = roleService.roleResourceList(roleName);
+        return result.ok(list);
+    }
+
 }

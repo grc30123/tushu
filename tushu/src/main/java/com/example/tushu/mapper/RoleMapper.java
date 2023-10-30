@@ -5,6 +5,8 @@ import com.example.tushu.entity.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
+
 /**
  * <p>
  * Mapper 接口
@@ -18,4 +20,6 @@ public interface RoleMapper extends BaseMapper<Role> {
 
     @Select("select * from role where ID_role=#{id}")
     public Role getbyid(int id);
+
+    List<Object> roleResourceList(String roleName);
 }

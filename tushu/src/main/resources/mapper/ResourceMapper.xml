@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.tushu.mapper.ResourceMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.tushu.entity.Resource">
+        <id column="id" property="id"/>
+        <result column="url" property="url"/>
+        <result column="name" property="name"/>
+        <result column="create_date" property="createDate"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , url, name, create_date
+    </sql>
+    <select id="resourceList" resultType="java.util.Map">
+        SELECT COALESCE(role.roleName, '1') AS roleName, url
+        FROM resource
+                 LEFT JOIN role_resource_relation ON resource.id = role_resource_relation.resourse_id
+                 LEFT JOIN role on role.ID_role = role_resource_relation.role_id
+    </select>
+
+</mapper>

@@ -20,4 +20,6 @@ public interface RoleAuthorityMapper extends BaseMapper<RoleAuthority> {
 
     @Select("select * from role_authority where ID_role = #{id} ")
     public List<RoleAuthority> getbyid(int id);
+
+    int addBatch(List<RoleAuthority> roleAuthorities);
 }

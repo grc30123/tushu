@@ -1,5 +1,6 @@
 package com.example.tushu.config.SecurityConfig;
 
+import com.example.tushu.config.SecurityConfig.component.DynamicSecurityFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,6 +39,8 @@ public class SecurityConfig {
     private CustomLogoutSuccessHandler customLogoutSuccessHandler;
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
+    @Autowired
+    private DynamicSecurityFilter dynamicSecurityFilter;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -51,7 +54,7 @@ public class SecurityConfig {
                 .antMatchers("/user/login").permitAll()
                 .antMatchers("/Sms/SmsRegister").permitAll()
                 .antMatchers("/upLoad/**").permitAll()
-                .antMatchers("/orders/**").hasRole("系统管理员")
+//                .antMatchers("/orders/**").hasRole("系统管理员")
 //                .antMatchers("/orders/**").hasAuthority("get")
 //                .antMatchers("/upLoad/**").permitAll()
                 .antMatchers(HttpMethod.GET, // 允许对于网站静态资源的无授权访问
@@ -80,7 +83,7 @@ public class SecurityConfig {
                 .and()
                 .exceptionHandling()
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
-//                .accessDeniedHandler(customAccessDeniedHandler)
+                .accessDeniedHandler(customAccessDeniedHandler)
 //                .and()
 //                .logout()
 ////                .logoutRequestMatcher(new OrRequestMatcher(new AntPathRequestMatcher("/user/logout", "post")))
@@ -91,6 +94,11 @@ public class SecurityConfig {
                 .and()
                 // 在用户名密码认证过滤器之前添加令牌校验过滤器，用于拦截每个请求，校验请求头中是否携带有效的令牌，并将认证信息存入SecurityContext中
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(dynamicSecurityFilter, UsernamePasswordAuthenticationFilter.class)
+//                .exceptionHandling()
+//                .accessDeniedHandler(customAccessDeniedHandler)
+//                .authenticationEntryPoint(customAuthenticationEntryPoint)
+//                .and()
                 .cors().configurationSource(corsConfigurationSource())//  打开 支持跨域访问
                 .and()
                 .csrf().disable()//               默认只有get请求可以通过认证 这句代码让所有请求都能通过认证
@@ -134,5 +142,10 @@ public class SecurityConfig {
         ProviderManager pm = new ProviderManager(customAuthenticationProvider);
         return pm;
     }
+
+//    @Bean
+//    public DynamicSecurityFilter dynamicSecurityFilter() {
+//        return dynamicSecurityFilter;
+//    }
 
 }
