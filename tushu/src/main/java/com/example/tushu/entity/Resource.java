@@ -1,15 +1,15 @@
 package com.example.tushu.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
+
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author grc
@@ -40,7 +40,7 @@ public class Resource implements Serializable {
     /**
      * 创建时间
      */
-    private Date createDate;
+    private String createDate;
 
 
 }

@@ -1,12 +1,11 @@
 package com.example.tushu.controller;
 
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.tushu.entity.Shopping;
 import com.example.tushu.service.ShoppingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -27,6 +26,18 @@ public class ShoppingController {
     @GetMapping("/getList")
     public List<Shopping> getList() {
         return shoppingService.list();
+    }
+
+    @GetMapping("/getPageList")
+    public Object getPageList(@RequestParam int size, @RequestParam int current) {
+        Page<Shopping> page = shoppingService.page(new Page<>(current, size));
+        return page;
+    }
+
+    @PostMapping("/insertShopping")
+    public Object insertShopping(Shopping shopping) {
+        boolean save = shoppingService.save(shopping);
+        return save;
     }
 
 }

@@ -9,26 +9,34 @@ import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.util.PathMatcher;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    private static Map<String, ConfigAttribute> configAttributeMap = null;
+    //    private static Map<String, ConfigAttribute> configAttributeMap = null;
+    private static MultiValueMap<String, ConfigAttribute> configAttributeMap = new LinkedMultiValueMap<>();
+
     @Autowired
     private ResourceService resourceService;
 
     @PostConstruct
     public void loadDataSource() {
         List<Map<String, String>> list = resourceService.resourceList();
-        Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
+//        Map<String, ConfigAttribute> map = new ConcurrentHashMap<>();
+        MultiValueMap<String, ConfigAttribute> map = new LinkedMultiValueMap<>();
         for (Map<String, String> resource : list) {
-            map.put(resource.get("url"), new SecurityConfig(resource.get("roleName")));
+//            map.put(resource.get("url"), new SecurityConfig(resource.get("roleName")));
+            String url = resource.get("url");
+            String roleName = resource.get("roleName");
+            map.add(url, new SecurityConfig(roleName));
         }
+
         configAttributeMap = map;
     }
 
@@ -39,7 +47,7 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        clearDataSource();
+//        clearDataSource();
         if (configAttributeMap == null) this.loadDataSource();
         List<ConfigAttribute> configAttributes = new ArrayList<>();
         //获取当前访问的路径
@@ -52,7 +60,9 @@ public class DynamicSecurityMetadataSource implements FilterInvocationSecurityMe
         while (iterator.hasNext()) {//用迭代器遍历 key
             String pattern = iterator.next().trim();
             if (pathMatcher.match(pattern, path)) {  //匹配访问的路径
-                configAttributes.add(configAttributeMap.get(pattern));//需要的角色
+                for (ConfigAttribute configAttribute : configAttributeMap.get(pattern)) {
+                    configAttributes.add(configAttribute);//需要的角色
+                }
             }
         }
         return configAttributes;//返回访问的路径

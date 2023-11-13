@@ -2,6 +2,7 @@ package com.example.tushu.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.tushu.entity.Role;
+import com.example.tushu.mode.dto.RoleAndResource;
 
 import java.util.List;
 
@@ -15,5 +16,5 @@ import java.util.List;
  */
 public interface RoleService extends IService<Role> {
 
-    List<Object> roleResourceList(String roleName);
+    List<RoleAndResource> roleResourceList(String roleName, int current, int size);
 }

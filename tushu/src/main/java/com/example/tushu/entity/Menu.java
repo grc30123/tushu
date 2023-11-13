@@ -1,7 +1,6 @@
 package com.example.tushu.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import java.util.Date;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import lombok.Data;
@@ -13,34 +12,54 @@ import lombok.EqualsAndHashCode;
  * </p>
  *
  * @author grc
- * @since 2023-10-29
+ * @since 2023-11-01
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class Resourse implements Serializable {
+public class Menu implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * resourse主键
+     * 菜单栏id
      */
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
     /**
-     * 资源地址
+     * 父id
      */
-    private String url;
+    private Integer pid;
 
     /**
-     * 资源名
+     * 路由路径
+     */
+    private String path;
+
+    /**
+     * 路由名
      */
     private String name;
 
     /**
-     * 创建时间
+     * 组件资源路径
      */
-    private Date createDate;
+    private String component;
+
+    /**
+     * 菜单名
+     */
+    private String title;
+
+    /**
+     * 图片名
+     */
+    private String icon;
+
+    /**
+     * 是否隐藏
+     */
+    private Boolean hidden;
 
 
 }

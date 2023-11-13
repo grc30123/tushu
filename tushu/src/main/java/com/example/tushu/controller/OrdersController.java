@@ -53,6 +53,12 @@ public class OrdersController {
         return res == false ? result.err() : result.ok(res);
     }
 
+    @PostMapping("/insertOrder")
+    public result insertOrder(@RequestBody Orders orders) {
+        boolean res = ordersService.save(orders);
+        return res == false ? result.err() : result.ok(res);
+    }
+
     @DeleteMapping("/DeleteById")
     public result Delete(int id) {
         boolean res = ordersService.removeById(id);

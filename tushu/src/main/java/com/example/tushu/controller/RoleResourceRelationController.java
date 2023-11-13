@@ -41,4 +41,11 @@ public class RoleResourceRelationController {
         return result.ok(i);
     }
 
+    @ApiOperation("批量添加角色资源关系")
+    @PostMapping("/save")
+    public result save(@RequestBody RoleResourceRelation roleResourceRelation) {
+        boolean i = roleResourceRelationService.save(roleResourceRelation);
+        return result.ok(i);
+    }
+
 }

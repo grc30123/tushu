@@ -15,11 +15,13 @@
         , ID_role, roleName
     </sql>
     <select id="roleResourceList" resultType="com.example.tushu.mode.dto.RoleAndResource">
-        SELECT role.roleName, resource.*
+        SELECT role.roleName, role_resource_relation.id as roleResourceId, resource.*
         FROM role
                  LEFT JOIN role_resource_relation ON role.ID_role = role_resource_relation.role_id
                  LEFT JOIN resource ON role_resource_relation.resourse_id = resource.id
         WHERE role.roleName = IFNULL(#{roleName}, role.roleName)
+            LIMIT #{size}
+        OFFSET #{current}
     </select>
 
 </mapper>

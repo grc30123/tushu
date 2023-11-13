@@ -4,9 +4,11 @@ package com.example.tushu.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.tushu.entity.Menu;
 import com.example.tushu.entity.User;
 import com.example.tushu.entity.UserRole;
 import com.example.tushu.mode.vo.UserInfo;
+import com.example.tushu.service.MenuService;
 import com.example.tushu.service.RoleService;
 import com.example.tushu.service.UserRoleService;
 import com.example.tushu.service.UserService;
@@ -43,7 +45,7 @@ import java.util.Map;
 @AllArgsConstructor
 public class UserController {
     private final UserService userService;
-
+    private final MenuService menuService;
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -61,8 +63,12 @@ public class UserController {
         String role = principal.getRole();
         Collection<GrantedAuthority> authorities = principal.getAuthorities();
         UserInfo userInfo = new UserInfo(idUser, account, role, authorities);
+        List<Menu> menuList = menuService.list();
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("menuList", menuList);
+        map.put("userInfo", userInfo);
         SecurityContext context = SecurityContextHolder.getContext();
-        return authentication == null ? result.err() : result.ok(userInfo);
+        return authentication == null ? result.err() : result.ok(map);
     }
 
     @ApiOperation(value = "获取用户信息", notes = "根据ID获取")
@@ -141,7 +147,7 @@ public class UserController {
 
     @ApiOperation("用户角色联查")
     @PostMapping("/getUserAndRole")
-    public result getUserAndRole(@RequestParam("size") int size, @RequestParam("current") int current, @RequestBody User condition) {
+    public result getUserAndRole(@RequestParam(value = "size", defaultValue = "10") int size, @RequestParam(value = "current", defaultValue = "1") int current, @RequestBody User condition) {
 //        @RequestParam("size") int size, @RequestParam("current") int current, @RequestBody User condition
         List<Object> list = userService.getUserAndRole(size, --current * size, condition);
         int total = userService.list().size();
