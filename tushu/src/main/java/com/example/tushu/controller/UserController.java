@@ -115,6 +115,11 @@ public class UserController {
     @PostMapping("/Register")
     public result Register(@RequestBody User user) {
         boolean res = userService.save(user);
+        User resUser = userService.getOne(new QueryWrapper<User>().eq("account", user.getAccount()));
+        UserRole userRole = new UserRole();
+        userRole.setIdRole(3);
+        userRole.setIdUser(Math.toIntExact(resUser.getIdUser()));
+        userRoleService.save(userRole);
         return res == false ? result.err() : result.ok(res);
     }
 
