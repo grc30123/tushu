@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * <p>
@@ -26,11 +25,38 @@ public class Shopping implements Serializable {
     private Integer shoppingId;
     @TableField(value = "ID_user")
     private String IDuser;
-    private String productName;
+    private Integer orderId;
+    private String bookId;
+    private String flag;
     private Integer quantity;
     private BigDecimal price;
-    private Date orderDate;
-    private String test;
+    private String orderDate;
+
+
+    public String getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(String bookId) {
+        this.bookId = bookId;
+    }
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
 
     public Integer getShoppingId() {
         return shoppingId;
@@ -48,13 +74,6 @@ public class Shopping implements Serializable {
         this.IDuser = IDuser;
     }
 
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
 
     public Integer getQuantity() {
         return quantity;
@@ -72,20 +91,13 @@ public class Shopping implements Serializable {
         this.price = price;
     }
 
-    public Date getOrderDate() {
+    public String getOrderDate() {
         return orderDate;
     }
 
-    public void setOrderDate(Date orderDate) {
+    public void setOrderDate(String orderDate) {
         this.orderDate = orderDate;
     }
 
-    public String getTest() {
-        return test;
-    }
-
-    public void setTest(String test) {
-        this.test = test;
-    }
 
 }
