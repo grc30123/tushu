@@ -6,7 +6,7 @@
     <resultMap id="BaseResultMap" type="com.example.tushu.entity.Shopping">
         <id column="shopping_id" property="shoppingId"/>
         <result column="ID_user" property="IDuser"/>
-        <result column="product_name" property="productName"/>
+        <result column="flag" property="flag"/>
         <result column="quantity" property="quantity"/>
         <result column="price" property="price"/>
         <result column="order_date" property="orderDate"/>
@@ -17,5 +17,20 @@
         order_id
         , customer_name, product_name, quantity, price, order_date
     </sql>
+    <select id="getList" resultType="com.example.tushu.mode.dto.ShoppingLIst">
+        SELECT shopping_id,book.book_id,book.name, book.description, book.image_url, book.price, shopping.quantity,
+        shopping.flag
+        FROM book
+        LEFT JOIN shopping
+        ON book.book_id = shopping.book_id
+        <where>
+            <if test="ID_user != null and ID_user!=-1">
+                AND shopping.ID_user = #{ID_user}
+                AND shopping.flag = #{flag}
+            </if>
+        </where>
+        LIMIT #{size}
+        OFFSET #{current}
+    </select>
 
 </mapper>

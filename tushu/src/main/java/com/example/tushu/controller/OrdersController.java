@@ -1,6 +1,7 @@
 package com.example.tushu.controller;
 
 
+import cn.hutool.core.date.DateUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.tushu.entity.Orders;
@@ -55,6 +56,7 @@ public class OrdersController {
 
     @PostMapping("/insertOrder")
     public result insertOrder(@RequestBody Orders orders) {
+        orders.setOrderDate(DateUtil.now());
         boolean res = ordersService.save(orders);
         return res == false ? result.err() : result.ok(res);
     }

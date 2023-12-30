@@ -25,7 +25,7 @@ public class Orders implements Serializable {
     @TableId(value = "order_id", type = IdType.AUTO)
     private Integer orderId;
 
-    private String customerName;
+    private String productName;
 
     private String orderDate;
 
@@ -34,6 +34,8 @@ public class Orders implements Serializable {
     private String paid;
 
     private BigDecimal totalAmount;
+
+    private Integer bookId;
 
 
 }

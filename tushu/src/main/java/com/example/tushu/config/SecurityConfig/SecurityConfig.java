@@ -52,11 +52,15 @@ public class SecurityConfig {
         http.authorizeRequests()
 
                 .antMatchers("/user/login").permitAll()
+                .antMatchers("/user/Register").permitAll()
                 .antMatchers("/Sms/SmsRegister").permitAll()
                 .antMatchers("/upLoad/**").permitAll()
 //                .antMatchers("/orders/**").hasRole("系统管理员")
 //                .antMatchers("/orders/**").hasAuthority("get")
 //                .antMatchers("/upLoad/**").permitAll()
+                .antMatchers("/book/getbyid/*").permitAll()
+                .antMatchers("/book/getlist/*").permitAll()
+                .antMatchers("/book/list").permitAll()
                 .antMatchers(HttpMethod.GET, // 允许对于网站静态资源的无授权访问
                         "/",
                         "/swagger-ui/",
